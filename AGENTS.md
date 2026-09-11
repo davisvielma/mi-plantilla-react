@@ -12,7 +12,9 @@ En construcción: deps instaladas, lógica aún sin conectar.
 - No hay test runner configurado.
 
 ## Commits
-- Mensajes SIEMPRE en inglés, formato Conventional Commits (`feat:`, `fix:`, `chore:`, `docs:`, `build:`).
+- NO commitear NADA a menos que el usuario lo pida explícitamente.
+- Cuando lo pida: mensaje SIEMPRE en inglés, formato Conventional Commits
+  (`feat:`, `fix:`, `chore:`, `docs:`, `build:`).
 - Usar la skill `git-commit` (staging inteligente + generación de mensaje).
 - SIEMPRE en UNA sola línea (sin cuerpo ni footer).
 
