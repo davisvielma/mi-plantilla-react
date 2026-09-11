@@ -14,6 +14,7 @@ En construcción: deps instaladas, lógica aún sin conectar.
 ## Commits
 - Mensajes SIEMPRE en inglés, formato Conventional Commits (`feat:`, `fix:`, `chore:`, `docs:`, `build:`).
 - Usar la skill `git-commit` (staging inteligente + generación de mensaje).
+- SIEMPRE en UNA sola línea (sin cuerpo ni footer).
 
 ## Tooling
 - Biome es el ÚNICO linter/formatter (no existe ESLint ni Prettier). Config: `biome.json`
