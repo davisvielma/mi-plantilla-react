@@ -16,7 +16,14 @@
 		"enabled": true,
 		"includes": ["**", "!**/*.svg"],
 		"rules": {
-			"preset": "recommended"
+			"preset": "recommended",
+			"correctness": {
+				"useExhaustiveDependencies": "warn",
+				"useHookAtTopLevel": "error"
+			},
+			"suspicious": {
+				"noExplicitAny": "error"
+			}
 		},
 		"domains": {
 			"react": "recommended"
