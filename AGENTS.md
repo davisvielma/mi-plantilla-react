@@ -6,7 +6,7 @@ En construcción: deps instaladas, lógica aún sin conectar.
 ## Comandos (gestor: Yarn v1 — `yarn.lock`)
 - `yarn dev`
 - `yarn build` — corre `tsc -b && vite build`; puerta de typecheck + build
-- `yarn check` — `biome check --write .`: formatea, ordena imports y aplica fixes. **Modifica archivos**
+- `yarn run check` — `biome check --write .`: formatea, ordena imports y aplica fixes. **Modifica archivos** (usar `yarn run check`, no `yarn check`: en Yarn v1 es un comando reservado)
 - `yarn lint` — biome lint read-only
 - `npx tsc -b` — solo typecheck
 - No hay test runner configurado.
