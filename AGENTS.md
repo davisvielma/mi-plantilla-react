@@ -63,8 +63,9 @@ mi-plantilla-react/
 │   │   └── use-theme.ts               #   hook del tema
 │   ├── lib/                           # 🔧 Infraestructura
 │   │   ├── api/
-│   │   │   ├── client.ts              #   instancia axios + interceptores (JWT, 401/403/500)
-│   │   │   └── http.ts                #   helpers tipados para TanStack Query
+│   │   │   ├── client.ts              #   instancia axios + interceptores (JWT, refresh, 401/403/500)
+│   │   │   ├── http.ts                #   helpers tipados para TanStack Query
+│   │   │   └── types.ts               #   ApiResponse<T> (wrapper del backend)
 │   │   ├── env.ts                     #   validación de variables de entorno con Zod
 │   │   └── utils.ts                   #   cn() = clsx + tailwind-merge
 │   ├── pages/                         # 🖥️ Vistas por ruta
