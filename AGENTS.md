@@ -1,7 +1,7 @@
 # mi-plantilla-react
 
 Plantilla SPA reutilizable: React 19 + TypeScript (strict) + Vite 8.
-En construcción: deps instaladas, lógica aún sin conectar.
+En construcción: infraestructura base lista (shadcn, husky, env, HTTP); lógica de negocio aún sin conectar.
 
 ## Comandos (gestor: Yarn v1 — `yarn.lock`)
 - `yarn dev`
@@ -25,6 +25,9 @@ En construcción: deps instaladas, lógica aún sin conectar.
   con `@theme`. Plugin `@tailwindcss/vite` ya registrado en `vite.config.ts`.
 - React Router v8: paquete `react-router`; APIs DOM (RouterProvider, Link, useNavigate) desde
   `react-router/dom`. **`react-router-dom` ya no existe**: no instalarlo ni importarlo.
+- shadcn/ui (base-nova) ya inicializado (`components.json` + `button`). El resto de componentes
+  (dropdown-menu, sonner, input…) se descargan **según se necesiten** con `npx shadcn add <name>`
+  (los primitivos de `@base-ui/react` y `cn` ya están como deps).
 - `verbatimModuleSyntax` → obligatorio `import type` para tipos.
   `erasableSyntaxOnly` → prohibidos enums/namespaces/parámetros con propiedades.
   Los imports TS llevan extensión (`.tsx`).
@@ -91,6 +94,8 @@ Reglas del patrón (verificación):
 - `pages/` solo orquesta features; `features/` contiene la lógica de negocio.
 - Estado servidor (TanStack Query) y HTTP viven en `features/<name>/hooks/` y `api/`;
   `lib/api/` solo define infraestructura del cliente.
+- README.md del árbol objetivo: aún es el README por defecto de Vite; pendiente de reemplazar
+  por la doc real de la plantilla.
 
 ## Al pedir "muéstrame la arquitectura"
 - Cuando el usuario pida "muéstrame la arquitectura" o "me perdí", mostrar SIEMPRE el árbol
@@ -98,9 +103,8 @@ Reglas del patrón (verificación):
   el nombre: **Feature-Based** (modular por funcionalidad), patrón *bulletproof-react*.
 
 ## Estado actual y gotchas
-- Deps instaladas pero SIN conectar: TanStack Query, Zustand, Axios, RHF, Zod, Sonner
-  (no hay providers, `lib/`, stores ni router aún).
-- `src/` aún plano: `main.tsx` + `App.tsx` + `index.css`. Sin alias `@/`; imports relativos.
+- Lista: HTTP (cliente axios + refresh + helpers), env (validación zod), shadcn base, husky/lint-staged.
+- Pendiente: providers raíz (TanStack Query + tema + Sonner), router v8, theme, feature ejemplo (falta
+  el endpoint demo del backend para conectar la query), README como doc propio.
 - `README.md` es el README por defecto de Vite y cita configs de ESLint inexistentes; ignorarlo
   como fuente de verdad (se reescribirá como doc de la plantilla).
-- `.vscode/settings.json` usa id de formatter incorrecto (`biome.biome`; debe ser `biomejs.biome`).
