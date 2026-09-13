@@ -1,12 +1,22 @@
 import { Toaster } from "sonner";
-import { Providers } from "@/app/providers";
+import { ModeToggle } from "./components/common/mode-toggle";
+import { useTheme } from "./hooks/use-theme";
 
 export const App = () => {
+	const { theme } = useTheme();
+
 	return (
-		<Providers>
-			<Toaster position="bottom-right" richColors closeButton theme="system" />
+		<>
+			<Toaster
+				position="bottom-right"
+				richColors
+				closeButton
+				theme={theme}
+				expand
+			/>
 			<h1 className="text-2xl font-bold">Hola mundo!!</h1>
-		</Providers>
+			<ModeToggle />
+		</>
 	);
 };
 
