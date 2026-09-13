@@ -7,7 +7,7 @@ import {
 import axios from "axios";
 import { lazy, type ReactNode, Suspense } from "react";
 import { toast } from "sonner";
-import { ThemeProvider } from "@/components/common/theme-provider";
+import { ThemeProvider } from "@/components/common/ThemeProvider";
 
 interface ErrorToast {
 	title: string;
