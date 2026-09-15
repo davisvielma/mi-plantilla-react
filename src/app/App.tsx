@@ -1,5 +1,6 @@
+import { RouterProvider } from "react-router/dom";
 import { Toaster } from "sonner";
-import { ModeToggle } from "@/components/common/ModeToggle";
+import { Router } from "@/app/Router";
 import { useTheme } from "@/hooks/useTheme";
 
 export const App = () => {
@@ -14,8 +15,7 @@ export const App = () => {
 				theme={theme}
 				expand
 			/>
-			<h1 className="text-2xl font-bold">Hola mundo!!</h1>
-			<ModeToggle />
+			<RouterProvider router={Router} />
 		</>
 	);
 };
