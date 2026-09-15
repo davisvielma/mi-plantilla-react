@@ -1,6 +1,6 @@
 import { Toaster } from "sonner";
-import { ModeToggle } from "./components/common/ModeToggle";
-import { useTheme } from "./hooks/UseTheme";
+import { ModeToggle } from "@/components/common/ModeToggle";
+import { useTheme } from "@/hooks/useTheme";
 
 export const App = () => {
 	const { theme } = useTheme();

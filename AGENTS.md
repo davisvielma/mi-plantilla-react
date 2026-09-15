@@ -32,6 +32,11 @@ En construcción: infraestructura base lista (shadcn, husky, env, HTTP); lógica
   `erasableSyntaxOnly` → prohibidos enums/namespaces/parámetros con propiedades.
   Los imports TS llevan extensión (`.tsx`).
 
+## Reglas de Nomenclatura (File Casing)
+- **PascalCase**: Reservado para componentes y archivos de React (`.tsx`) creados por nosotros (ej: `App.tsx`, `Providers.tsx`, `ThemeProvider.tsx`, `ModeToggle.tsx`). *Excepción: componentes de terceros como shadcn/ui que vienen por defecto en kebab-case.*
+- **camelCase**: Reservado para custom hooks de React (`.ts` o `.tsx`) (ej: `useTheme.ts`).
+- **kebab-case**: Reservado exclusivamente para archivos puros de TypeScript que no son componentes de React ni hooks (`.ts` de configuración, api, schemas, utilidades, ej: `src/lib/api/client.ts`, `src/lib/env.ts`, `vite.config.ts`).
+
 ## Arquitectura (Feature-Based) — regla de oro
 Patrón: **Feature-Based** (modular por funcionalidad), estándar de la industria, estilo *bulletproof-react*.
 Cada feature es autocontenida (api + componentes + hooks + esquemas + estado). Árbol objetivo:
@@ -44,38 +49,40 @@ mi-plantilla-react/
 ├── public/                            # favicon, icons
 ├── src/
 │   ├── app/                           # ⚙️ Composición raíz
-│   │   ├── App.tsx                    #   componente raíz
-│   │   ├── providers.tsx              #   QueryClient + Theme + Sonner providers
-│   │   └── router.tsx                 #   createBrowserRouter (React Router v8)
+│   │   ├── App.tsx                    #   componente raíz (PascalCase)
+│   │   ├── Providers.tsx              #   QueryClient + Theme + Sonner providers (PascalCase)
+│   │   └── Router.tsx                 #   createBrowserRouter (React Router v8) (PascalCase)
 │   ├── assets/                        # media, logos
-│   ├── components/                    # 🧩 Componentes reutilizables
-│   │   ├── ui/                        #   shadcn/ui (button, input, dropdown-menu…)
-│   │   └── common/                    #   propios de la plantilla
-│   │       ├── theme-provider.tsx     #   contexto de tema (claro/oscuro/sistema)
-│   │       ├── mode-toggle.tsx        #   switch con dropdown + lucide icons
-│   │       └── app-layout.tsx         #   layout base (Outlet + navbar)
+│   ├── components/                    # 🧩 Componentes UI globales (PascalCase)
+│   │   ├── ui/                        #   shadcn/ui (button, input, dropdown-menu…) (kebab-case nativo)
+│   │   ├── layouts/                   #   layouts compartidos de la aplicación (PascalCase)
+│   │   │   └── AppLayout.tsx          #   layout base (Outlet + navbar) (PascalCase)
+│   │   └── common/                    #   componentes UI genéricos y reutilizables (no providers, no layouts) (PascalCase)
+│   │       └── ModeToggle.tsx         #   selector de tema (PascalCase)
 │   ├── features/                      # 📦 Módulos por funcionalidad
 │   │   └── example/                   #   feature de demostración (patrón a copiar)
-│   │       ├── api/                   #     endpoints axios
-│   │       ├── components/            #     componentes de la feature
-│   │       ├── hooks/                 #     useExampleQuery/useExampleMutation
-│   │       ├── schemas/               #     validación zod
-│   │       ├── store.ts               #     estado zustand de la feature
-│   │       └── types.ts               #     tipos de la feature
-│   ├── hooks/                         # 🪝 Hooks genéricos reutilizables
-│   │   └── use-theme.ts               #   hook del tema
-│   ├── lib/                           # 🔧 Infraestructura
+│   │       ├── api/                   #     endpoints axios (kebab-case)
+│   │       ├── components/            #     componentes de la feature (PascalCase)
+│   │       ├── hooks/                 #     hooks específicos de la feature (camelCase)
+│   │       ├── schemas/               #     validación zod (kebab-case)
+│   │       ├── store.ts               #     estado zustand de la feature (camelCase)
+│   │       └── types.ts               #     tipos de la feature (kebab-case)
+│   ├── hooks/                         # 🪝 Hooks genéricos reutilizables globales
+│   │   └── useTheme.ts                #   hook del tema (camelCase)
+│   ├── lib/                           # 🔧 Infraestructura técnica
 │   │   ├── api/
-│   │   │   ├── client.ts              #   instancia axios + interceptores (JWT, refresh, 401/403/500)
-│   │   │   ├── http.ts                #   helpers tipados para TanStack Query
-│   │   │   └── types.ts               #   ApiResponse<T> (wrapper del backend)
-│   │   ├── env.ts                     #   validación de variables de entorno con Zod
-│   │   └── utils.ts                   #   cn() = clsx + tailwind-merge
+│   │   │   ├── client.ts              #   instancia axios + interceptores (JWT, refresh, 401/403/500) (kebab-case)
+│   │   │   ├── http.ts                #   helpers tipados para TanStack Query (kebab-case)
+│   │   │   └── types.ts               #   ApiResponse<T> (wrapper del backend) (kebab-case)
+│   │   ├── env.ts                     #   validación de variables de entorno con Zod (kebab-case)
+│   │   └── utils.ts                   #   cn() = clsx + tailwind-merge (kebab-case)
 │   ├── pages/                         # 🖥️ Vistas por ruta
 │   │   └── home/index.tsx             #   página demo de la plantilla
-│   ├── schemas/                       # esquemas zod compartidos globales
-│   ├── stores/                        # stores zustand globales
-│   ├── types/                         # tipos TS compartidos
+│   ├── providers/                     # 🌐 Proveedores de contexto globales (PascalCase)
+│   │   └── ThemeProvider.tsx          #   proveedor de tema (PascalCase)
+│   ├── schemas/                       # esquemas zod compartidos globales (kebab-case)
+│   ├── stores/                        # stores zustand globales (camelCase)
+│   ├── types/                         # tipos TS compartidos (kebab-case)
 │   ├── index.css                      # Tailwind v4 + tokens oklch + dark variant
 │   └── main.tsx                       # entry point
 ├── components.json                    # configuración shadcn/ui
