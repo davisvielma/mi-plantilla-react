@@ -2,8 +2,8 @@ import axios, { type AxiosError, type InternalAxiosRequestConfig } from "axios";
 import type { ApiResponse } from "@/lib/api/types";
 import { env } from "@/lib/env";
 
-const ACCESS_TOKEN_KEY = "access-token";
-const REFRESH_TOKEN_KEY = "refresh-token";
+export const ACCESS_TOKEN_KEY = "access-token";
+export const REFRESH_TOKEN_KEY = "refresh-token";
 
 export const apiClient = axios.create({
 	baseURL: env.VITE_API_URL,
@@ -60,7 +60,15 @@ apiClient.interceptors.response.use(
 		const { config, response } = error;
 		const status = response?.status;
 
-		if (status === 401 && config && !(config as RetryConfig)._retry) {
+		const isLoginRequest =
+			config?.method === "post" && config.url?.includes("auth/login");
+
+		if (
+			status === 401 &&
+			config &&
+			!(config as RetryConfig)._retry &&
+			!isLoginRequest
+		) {
 			if (getRefreshToken()) {
 				try {
 					await singleFlightRefresh();
@@ -69,11 +77,11 @@ apiClient.interceptors.response.use(
 					return apiClient(config);
 				} catch {
 					clearSession();
-					window.location.assign("/login");
+					window.location.assign("/auth/login");
 				}
 			} else {
 				clearSession();
-				window.location.assign("/login");
+				window.location.assign("/auth/login");
 			}
 		}
 

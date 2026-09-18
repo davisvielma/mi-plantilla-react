@@ -105,13 +105,16 @@ export const HomePage = () => {
 	const navigate = useNavigate();
 	// const { user } = useAuth();
 
-	const goToDashboard = () => {
+	const goTo = (path?: "login" | "register") => {
 		// if (user) {
 		// 	navigate("/dashboard");
-		// } else {
-		// 	navigate("/login");
+		// return;
 		// }
-		navigate("/login");
+
+		if (path) {
+			navigate(path === "login" ? "/auth/login" : "/auth/register");
+			return;
+		}
 	};
 
 	return (
@@ -152,7 +155,7 @@ export const HomePage = () => {
 						>
 							<Button
 								size="lg"
-								onClick={goToDashboard}
+								onClick={() => goTo("login")}
 								className="w-full sm:w-auto"
 							>
 								{/* {user ? "Ir al panel de control" : "Empieza gratis"} */}
@@ -282,7 +285,6 @@ export const HomePage = () => {
 								<Button
 									className="mt-8 w-full"
 									variant={tier.highlight ? "default" : "outline"}
-									onClick={goToDashboard}
 								>
 									{tier.cta}
 								</Button>
@@ -307,15 +309,15 @@ export const HomePage = () => {
 							desplegar más rápido.
 						</p>
 						<div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-							<Button size="lg" onClick={goToDashboard}>
-								{/* {user ? "Ir al panel de control" : "Create Free Account"} */}
+							<Button size="lg" onClick={() => goTo("register")}>
+								{/* {user ? "Ir al panel de control" : "Crear cuenta gratis"} */}
 								Crear cuenta gratis
 								<ArrowRight className="ml-2 h-4 w-4" />
 							</Button>
 							<Button
 								size="lg"
 								variant="outline"
-								onClick={() => navigate("/login")}
+								onClick={() => navigate("/auth/login")}
 							>
 								Iniciar sesión
 							</Button>

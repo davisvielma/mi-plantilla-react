@@ -41,11 +41,11 @@ export const Header = ({ sections }: Props) => {
 						<Button
 							variant="ghost"
 							size="sm"
-							onClick={() => navigate("/login")}
+							onClick={() => navigate("/auth/login")}
 						>
 							Iniciar sesión
 						</Button>
-						<Button size="sm" onClick={() => navigate("/register")}>
+						<Button size="sm" onClick={() => navigate("/auth/register")}>
 							Empezar
 							<ArrowRight className="ml-1 h-4 w-4" />
 						</Button>
@@ -69,10 +69,10 @@ export const Header = ({ sections }: Props) => {
 									</DropdownMenuItem>
 								))}
 								<DropdownMenuSeparator />
-								<DropdownMenuItem onClick={() => navigate("/login")}>
+								<DropdownMenuItem onClick={() => navigate("/auth/login")}>
 									<span>Iniciar sesión</span>
 								</DropdownMenuItem>
-								<DropdownMenuItem onClick={() => navigate("/register")}>
+								<DropdownMenuItem onClick={() => navigate("/auth/register")}>
 									<span>Empezar</span>
 								</DropdownMenuItem>
 							</DropdownMenuContent>

@@ -1,10 +1,21 @@
 import { Sparkles } from "lucide-react";
 
 interface Props {
-	application: "footer" | "navbar";
+	application: "footer" | "navbar" | "auth";
 }
 
 export const Logo = ({ application }: Props) => {
+	if (application === "auth") {
+		return (
+			<div className="relative z-10 flex items-center gap-2 text-primary-foreground">
+				<div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/20 backdrop-blur">
+					<Sparkles className="h-5 w-5" />
+				</div>
+				<span className="text-xl font-bold">React Starter</span>
+			</div>
+		);
+	}
+
 	return (
 		<div className="flex items-center gap-2">
 			<div
