@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { ModeToggle } from "@/components/common/ModeToggle";
 import { Button } from "@/components/ui/button";
 
-export const NotFound = () => {
+export const NotFoundPage = () => {
 	const navigate = useNavigate();
 
 	const handleButton = () => {

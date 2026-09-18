@@ -30,7 +30,11 @@ En construcción: infraestructura base lista (shadcn, husky, env, HTTP); lógica
   (los primitivos de `@base-ui/react` y `cn` ya están como deps).
 - `verbatimModuleSyntax` → obligatorio `import type` para tipos.
   `erasableSyntaxOnly` → prohibidos enums/namespaces/parámetros con propiedades.
-  Los imports TS llevan extensión (`.tsx`).
+  Imports sin extensión (Vite las resuelve; no escribir `.ts`/`.tsx`).
+- Iconos: `lucide-react` para iconos UI; `react-icons` (fa6) solo para marcas
+  (GitHub/X/LinkedIn) como en `Footer.tsx`.
+- Imports: alias `@/` para carpetas ajenas (ej: `@/components/ui/button`);
+  relativo para lo que está en la misma carpeta (ej: `./Logo`).
 
 ## Reglas de Nomenclatura (File Casing)
 - **PascalCase**: Reservado para componentes y archivos de React (`.tsx`) creados por nosotros (ej: `App.tsx`, `Providers.tsx`, `ThemeProvider.tsx`, `ModeToggle.tsx`). *Excepción: componentes de terceros como shadcn/ui que vienen por defecto en kebab-case.*
@@ -56,8 +60,11 @@ mi-plantilla-react/
 │   ├── components/                    # 🧩 Componentes UI globales (PascalCase)
 │   │   ├── ui/                        #   shadcn/ui (button, input, dropdown-menu…) (kebab-case nativo)
 │   │   ├── layouts/                   #   layouts compartidos de la aplicación (PascalCase)
-│   │   │   └── AppLayout.tsx          #   layout base (Outlet + navbar) (PascalCase)
+│   │   │   └── AppLayout.tsx          #   layout base (Header + Outlet + Footer) (PascalCase)
 │   │   └── common/                    #   componentes UI genéricos y reutilizables (no providers, no layouts) (PascalCase)
+│   │       ├── Footer.tsx             #   footer del layout: secciones + marcas sociales (PascalCase)
+│   │       ├── Header.tsx             #   header sticky: nav, tema, login/register y menú móvil (PascalCase)
+│   │       ├── Logo.tsx               #   logo React Starter con variante navbar/footer (PascalCase)
 │   │       └── ModeToggle.tsx         #   selector de tema (PascalCase)
 │   ├── features/                      # 📦 Módulos por funcionalidad
 │   │   └── example/                   #   feature de demostración (patrón a copiar)
@@ -77,7 +84,11 @@ mi-plantilla-react/
 │   │   ├── env.ts                     #   validación de variables de entorno con Zod (kebab-case)
 │   │   └── utils.ts                   #   cn() = clsx + tailwind-merge (kebab-case)
 │   ├── pages/                         # 🖥️ Vistas por ruta
-│   │   └── home/index.tsx             #   página demo de la plantilla
+│   │   ├── HomePage.tsx               #   página demo: secciones Hero/Features/Pricing/CTA (PascalCase)
+│   │   ├── NotFoundPage.tsx           #   404 standalone con selector de tema propio (PascalCase)
+│   │   ├── auth/                      #   vistas de autenticación (login, register) — pendientes
+│   │   ├── user/                      #   vistas de usuario — pendientes
+│   │   └── admin/                     #   vistas de administración — pendientes
 │   ├── providers/                     # 🌐 Proveedores de contexto globales (PascalCase)
 │   │   └── ThemeProvider.tsx          #   proveedor de tema (PascalCase)
 │   ├── schemas/                       # esquemas zod compartidos globales (kebab-case)
@@ -99,6 +110,9 @@ Reglas del patrón (verificación):
 - Las features NO importan entre sí (solo capas comunes). Si dos features comparten algo,
   sube a `components/`, `lib/`, `hooks/`, `stores/`, `schemas/` o `types/`.
 - `pages/` solo orquesta features; `features/` contiene la lógica de negocio.
+- Páginas que NO orquestan features (demo, 404, mero enrutado) van como archivos directos
+  `${Nombre}Page.tsx` en `pages/` (ej: `HomePage.tsx`); las que orquestan features van en
+  subcarpetas (`pages/auth/login.tsx`, etc.).
 - Estado servidor (TanStack Query) y HTTP viven en `features/<name>/hooks/` y `api/`;
   `lib/api/` solo define infraestructura del cliente.
 - README.md del árbol objetivo: aún es el README por defecto de Vite; pendiente de reemplazar
@@ -110,8 +124,10 @@ Reglas del patrón (verificación):
   el nombre: **Feature-Based** (modular por funcionalidad), patrón *bulletproof-react*.
 
 ## Estado actual y gotchas
-- Lista: HTTP (cliente axios + refresh + helpers), env (validación zod), shadcn base, husky/lint-staged.
-- Pendiente: providers raíz (TanStack Query + tema + Sonner), router v8, theme, feature ejemplo (falta
-  el endpoint demo del backend para conectar la query), README como doc propio.
+- Lista: HTTP (cliente axios + refresh + helpers), env (validación zod), shadcn base
+  (button + dropdown-menu), husky/lint-staged, providers raíz (TanStack Query + tema + Sonner),
+  theme, router v8 con AppLayout (Header + Footer) + HomePage demo + NotFoundPage, react-icons (fa6).
+- Pendiente: páginas de auth (`/login`, `/register` — hoy caen en NotFoundPage), feature ejemplo
+  (falta el endpoint demo del backend para conectar la query), README como doc propio.
 - `README.md` es el README por defecto de Vite y cita configs de ESLint inexistentes; ignorarlo
   como fuente de verdad (se reescribirá como doc de la plantilla).
