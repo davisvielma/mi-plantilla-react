@@ -8,7 +8,7 @@ export const http = {
 	},
 	post: async <TBody, TResponse = TBody>(
 		url: string,
-		body: TBody,
+		body?: TBody,
 		opts?: { signal?: AbortSignal },
 	) => {
 		const res = await apiClient.post<ApiResponse<TResponse>>(url, body, opts);

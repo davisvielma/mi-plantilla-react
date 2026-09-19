@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { useAuthStore } from "@/features/auth/store";
 
 // import { useAuth } from "@/lib/auth";
 
@@ -103,13 +104,13 @@ const pricingTiers = [
 
 export const HomePage = () => {
 	const navigate = useNavigate();
-	// const { user } = useAuth();
+	const { user } = useAuthStore();
 
 	const goTo = (path?: "login" | "register") => {
-		// if (user) {
-		// 	navigate("/dashboard");
-		// return;
-		// }
+		if (user) {
+			navigate("/dashboard");
+			return;
+		}
 
 		if (path) {
 			navigate(path === "login" ? "/auth/login" : "/auth/register");
@@ -158,8 +159,7 @@ export const HomePage = () => {
 								onClick={() => goTo("login")}
 								className="w-full sm:w-auto"
 							>
-								{/* {user ? "Ir al panel de control" : "Empieza gratis"} */}
-								Empieza gratis
+								{user ? "Ir al panel de control" : "Empieza gratis"}
 								<ArrowRight className="ml-2 h-4 w-4" />
 							</Button>
 							<a
@@ -310,17 +310,18 @@ export const HomePage = () => {
 						</p>
 						<div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
 							<Button size="lg" onClick={() => goTo("register")}>
-								{/* {user ? "Ir al panel de control" : "Crear cuenta gratis"} */}
-								Crear cuenta gratis
+								{user ? "Ir al panel de control" : "Crear cuenta gratis"}
 								<ArrowRight className="ml-2 h-4 w-4" />
 							</Button>
-							<Button
-								size="lg"
-								variant="outline"
-								onClick={() => navigate("/auth/login")}
-							>
-								Iniciar sesión
-							</Button>
+							{!user && (
+								<Button
+									size="lg"
+									variant="outline"
+									onClick={() => navigate("/auth/login")}
+								>
+									Iniciar sesión
+								</Button>
+							)}
 						</div>
 					</div>
 				</div>

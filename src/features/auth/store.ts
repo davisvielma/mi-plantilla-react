@@ -3,6 +3,7 @@ import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "@/lib/api/client";
 import type { AuthStatus } from "@/types/auth";
 import type { User } from "@/types/user";
 import { loginAction } from "./api/login";
+import { logoutAction } from "./api/logout";
 import { registerAction } from "./api/register";
 
 interface AuthState {
@@ -20,7 +21,7 @@ interface AuthState {
 		password: string,
 		fullName: string,
 	) => Promise<boolean>;
-	logout: () => void;
+	logout: () => Promise<boolean>;
 	// checkAuthStatus: () => Promise<boolean>;
 }
 
@@ -81,16 +82,21 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 			return false;
 		}
 	},
-	logout: () => {
-		localStorage.removeItem(ACCESS_TOKEN_KEY);
-		localStorage.removeItem(REFRESH_TOKEN_KEY);
-		set({
-			user: null,
-			accessToken: null,
-			refreshToken: null,
-			authStatus: "not-authenticated",
-		});
-		return true;
+	logout: async () => {
+		try {
+			await logoutAction();
+			localStorage.removeItem(ACCESS_TOKEN_KEY);
+			localStorage.removeItem(REFRESH_TOKEN_KEY);
+			set({
+				user: null,
+				accessToken: null,
+				refreshToken: null,
+				authStatus: "not-authenticated",
+			});
+			return true;
+		} catch {
+			return false;
+		}
 	},
 	// checkAuthStatus: async () => {
 	// 	try {

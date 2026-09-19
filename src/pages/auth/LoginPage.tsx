@@ -56,13 +56,6 @@ export const LoginPage = () => {
 
 			<CardContent>
 				<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-					{/* {serverError && (
-						<div className="flex items-start gap-2 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
-							<AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-							<span>{serverError}</span>
-						</div>
-					)} */}
-
 					<div className="space-y-2">
 						<Label htmlFor="email">Correo electrónico</Label>
 						<div className="relative">

@@ -1,4 +1,5 @@
 import { ArrowRight, Menu } from "lucide-react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,6 +9,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAuthStore } from "@/features/auth/store";
 import { Logo } from "./Logo";
 import { ModeToggle } from "./ModeToggle";
 
@@ -16,7 +18,15 @@ interface Props {
 }
 
 export const Header = ({ sections }: Props) => {
+	const [lodaing, setLodaing] = useState(false);
 	const navigate = useNavigate();
+	const { user, logout } = useAuthStore();
+
+	const handleLogout = async () => {
+		setLodaing(true);
+		await logout();
+		setLodaing(false);
+	};
 
 	return (
 		<header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-lg">
@@ -38,17 +48,39 @@ export const Header = ({ sections }: Props) => {
 				<div className="flex items-center gap-2">
 					<ModeToggle />
 					<div className="hidden items-center gap-2 md:flex">
-						<Button
-							variant="ghost"
-							size="sm"
-							onClick={() => navigate("/auth/login")}
-						>
-							Iniciar sesión
-						</Button>
-						<Button size="sm" onClick={() => navigate("/auth/register")}>
-							Empezar
-							<ArrowRight className="ml-1 h-4 w-4" />
-						</Button>
+						{user ? (
+							<>
+								<Button
+									size="sm"
+									disabled={lodaing}
+									onClick={() => navigate("/dashboard")}
+								>
+									Panel de control
+								</Button>
+								<Button
+									variant="destructive"
+									size="sm"
+									disabled={lodaing}
+									onClick={handleLogout}
+								>
+									Cerrar sesión
+								</Button>
+							</>
+						) : (
+							<>
+								<Button
+									variant="ghost"
+									size="sm"
+									onClick={() => navigate("/auth/login")}
+								>
+									Iniciar sesión
+								</Button>
+								<Button size="sm" onClick={() => navigate("/auth/register")}>
+									Regístrate
+									<ArrowRight className="ml-1 h-4 w-4" />
+								</Button>
+							</>
+						)}
 					</div>
 					<div className="md:hidden">
 						<DropdownMenu>
@@ -59,7 +91,7 @@ export const Header = ({ sections }: Props) => {
 							>
 								<Menu className="h-5 w-5" />
 							</DropdownMenuTrigger>
-							<DropdownMenuContent align="end">
+							<DropdownMenuContent align="end" className="w-40">
 								{sections.map((section) => (
 									<DropdownMenuItem
 										key={`menu-item-${section.ref}`}
@@ -69,12 +101,34 @@ export const Header = ({ sections }: Props) => {
 									</DropdownMenuItem>
 								))}
 								<DropdownMenuSeparator />
-								<DropdownMenuItem onClick={() => navigate("/auth/login")}>
-									<span>Iniciar sesión</span>
-								</DropdownMenuItem>
-								<DropdownMenuItem onClick={() => navigate("/auth/register")}>
-									<span>Empezar</span>
-								</DropdownMenuItem>
+								{user ? (
+									<>
+										<DropdownMenuItem
+											disabled={lodaing}
+											onClick={() => navigate("/dashboard")}
+										>
+											<span>Panel de control</span>
+										</DropdownMenuItem>
+										<DropdownMenuItem
+											variant="destructive"
+											disabled={lodaing}
+											onClick={handleLogout}
+										>
+											<span>Cerrar sesión</span>
+										</DropdownMenuItem>
+									</>
+								) : (
+									<>
+										<DropdownMenuItem onClick={() => navigate("/auth/login")}>
+											<span>Iniciar sesión</span>
+										</DropdownMenuItem>
+										<DropdownMenuItem
+											onClick={() => navigate("/auth/register")}
+										>
+											<span>Regístrate</span>
+										</DropdownMenuItem>
+									</>
+								)}
 							</DropdownMenuContent>
 						</DropdownMenu>
 					</div>
