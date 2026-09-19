@@ -14,36 +14,39 @@ const AuthLayout = () => {
 
 				<div className="relative z-10 text-primary-foreground">
 					<h1 className="text-4xl font-bold leading-tight">
-						Build faster,
+						Construye más rápido,
 						<br />
-						ship smarter.
+						despliega de forma inteligente.
 					</h1>
 					<p className="mt-4 max-w-md text-lg text-primary-foreground/80">
-						A production-ready template with authentication, role-based
-						dashboards, and a clean architecture.
+						Una plantilla lista para producción con autenticación, paneles
+						basados en roles y una arquitectura limpia.
 					</p>
 					<div className="mt-8 flex items-center gap-6">
 						<div>
 							<div className="text-3xl font-bold">10k+</div>
 							<div className="text-sm text-primary-foreground/70">
-								Developers
+								Desarrolladores
 							</div>
 						</div>
 						<div className="h-10 w-px bg-white/20" />
 						<div>
 							<div className="text-3xl font-bold">99.9%</div>
-							<div className="text-sm text-primary-foreground/70">Uptime</div>
+							<div className="text-sm text-primary-foreground/70">
+								Disponibilidad
+							</div>
 						</div>
 						<div className="h-10 w-px bg-white/20" />
 						<div>
 							<div className="text-3xl font-bold">24/7</div>
-							<div className="text-sm text-primary-foreground/70">Support</div>
+							<div className="text-sm text-primary-foreground/70">Soporte</div>
 						</div>
 					</div>
 				</div>
 
 				<div className="relative z-10 text-sm text-primary-foreground/70">
-					© {new Date().getFullYear()} React Starter. All rights reserved.
+					© {new Date().getFullYear()} React Starter. Todos los derechos
+					reservados.
 				</div>
 			</div>
 
