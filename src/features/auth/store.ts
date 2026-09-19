@@ -3,6 +3,7 @@ import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "@/lib/api/client";
 import type { AuthStatus } from "@/types/auth";
 import type { User } from "@/types/user";
 import { loginAction } from "./api/login";
+import { registerAction } from "./api/register";
 
 interface AuthState {
 	// properties
@@ -14,11 +15,11 @@ interface AuthState {
 	isAdmin: () => boolean;
 	// actions
 	login: (email: string, password: string) => Promise<boolean>;
-	// register: (
-	// 	email: string,
-	// 	password: string,
-	// 	fullName: string,
-	// ) => Promise<boolean>;
+	register: (
+		email: string,
+		password: string,
+		fullName: string,
+	) => Promise<boolean>;
 	logout: () => void;
 	// checkAuthStatus: () => Promise<boolean>;
 }
@@ -56,18 +57,30 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 			return false;
 		}
 	},
-	// register: async (email: string, password: string, fullName: string) => {
-	// 	try {
-	// 		const data = await registerAction({ email, password, fullName });
-	// 		localStorage.setItem("token", data.token);
-	// 		set({ user: data.user, token: data.token, authStatus: "authenticated" });
-	// 		return true;
-	// 	} catch {
-	// 		localStorage.removeItem("token");
-	// 		set({ user: null, token: null, authStatus: "not-authenticated" });
-	// 		return false;
-	// 	}
-	// },
+	register: async (email: string, password: string, fullName: string) => {
+		try {
+			const data = await registerAction({ email, password, fullName });
+			localStorage.setItem(ACCESS_TOKEN_KEY, data.accessToken);
+			localStorage.setItem(REFRESH_TOKEN_KEY, data.refreshToken);
+			set({
+				user: data.user,
+				accessToken: data.accessToken,
+				refreshToken: data.refreshToken,
+				authStatus: "authenticated",
+			});
+			return true;
+		} catch {
+			localStorage.removeItem(ACCESS_TOKEN_KEY);
+			localStorage.removeItem(REFRESH_TOKEN_KEY);
+			set({
+				user: null,
+				accessToken: null,
+				refreshToken: null,
+				authStatus: "not-authenticated",
+			});
+			return false;
+		}
+	},
 	logout: () => {
 		localStorage.removeItem(ACCESS_TOKEN_KEY);
 		localStorage.removeItem(REFRESH_TOKEN_KEY);

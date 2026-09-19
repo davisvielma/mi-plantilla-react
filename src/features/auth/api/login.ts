@@ -1,20 +1,22 @@
+import { toast } from "sonner";
+import { getApiErrorMessage } from "@/lib/api/error";
 import { http } from "@/lib/api/http";
-import type { AuthResponse, LoginFormValues } from "../types";
+import type { AuthResponse, LoginSchemaType } from "../types";
 
 export const loginAction = async ({
 	email,
 	password,
-}: LoginFormValues): Promise<AuthResponse> => {
+}: LoginSchemaType): Promise<AuthResponse> => {
 	try {
-		const data = await http.post<LoginFormValues, AuthResponse>("auth/login", {
+		const data = await http.post<LoginSchemaType, AuthResponse>("auth/login", {
 			email,
 			password,
 		});
 
 		return data;
 	} catch (error) {
-		console.log(error);
-
+		console.error(error);
+		toast.error(getApiErrorMessage(error));
 		throw error;
 	}
 };

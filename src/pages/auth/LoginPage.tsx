@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircle, Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
+import { Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
@@ -16,12 +16,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { loginSchema } from "@/features/auth/schemas/login.schema";
 import { useAuthStore } from "@/features/auth/store";
-import type { LoginFormValues } from "@/features/auth/types";
+import type { LoginSchemaType } from "@/features/auth/types";
 
 export const LoginPage = () => {
 	const navigate = useNavigate();
 	const [showPassword, setShowPassword] = useState(false);
-	const [serverError, setServerError] = useState<string | null>(null);
 
 	const { login } = useAuthStore();
 
@@ -29,7 +28,7 @@ export const LoginPage = () => {
 		register,
 		handleSubmit,
 		formState: { errors, isSubmitting },
-	} = useForm<LoginFormValues>({
+	} = useForm<LoginSchemaType>({
 		resolver: zodResolver(loginSchema),
 		defaultValues: {
 			email: "",
@@ -37,15 +36,13 @@ export const LoginPage = () => {
 		},
 	});
 
-	const onSubmit = async (data: LoginFormValues) => {
+	const onSubmit = async (data: LoginSchemaType) => {
 		const isValid = await login(data.email, data.password);
 
 		if (isValid) {
 			navigate("/");
 			return;
 		}
-
-		setServerError("Credenciales inválidas o error de conexión.");
 	};
 
 	return (
@@ -59,12 +56,12 @@ export const LoginPage = () => {
 
 			<CardContent>
 				<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-					{serverError && (
+					{/* {serverError && (
 						<div className="flex items-start gap-2 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
 							<AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
 							<span>{serverError}</span>
 						</div>
-					)}
+					)} */}
 
 					<div className="space-y-2">
 						<Label htmlFor="email">Correo electrónico</Label>
