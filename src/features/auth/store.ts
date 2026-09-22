@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "@/lib/api/client";
+import { clearSession, setSession } from "@/lib/api/client";
 import type { AuthStatus } from "@/types/auth";
 import type { User } from "@/types/user";
 import { loginAction } from "./api/login";
@@ -41,13 +41,11 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 				email,
 				password,
 			});
-			localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
-			localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+			setSession(accessToken, refreshToken);
 			set({ user, accessToken, refreshToken, authStatus: "authenticated" });
 			return true;
 		} catch {
-			localStorage.removeItem(ACCESS_TOKEN_KEY);
-			localStorage.removeItem(REFRESH_TOKEN_KEY);
+			clearSession();
 			set({
 				user: null,
 				accessToken: null,
@@ -64,13 +62,11 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 				password,
 				fullName,
 			});
-			localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
-			localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+			setSession(accessToken, refreshToken);
 			set({ user, accessToken, refreshToken, authStatus: "authenticated" });
 			return true;
 		} catch {
-			localStorage.removeItem(ACCESS_TOKEN_KEY);
-			localStorage.removeItem(REFRESH_TOKEN_KEY);
+			clearSession();
 			set({
 				user: null,
 				accessToken: null,
@@ -83,8 +79,7 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 	logout: async () => {
 		try {
 			await logoutAction();
-			localStorage.removeItem(ACCESS_TOKEN_KEY);
-			localStorage.removeItem(REFRESH_TOKEN_KEY);
+			clearSession();
 			set({
 				user: null,
 				accessToken: null,

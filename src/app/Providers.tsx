@@ -7,6 +7,7 @@ import {
 import axios from "axios";
 import { lazy, type ReactNode, Suspense } from "react";
 import { toast } from "sonner";
+import { AuthProvider } from "@/providers/AuthProvider";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 
 interface ErrorToast {
@@ -75,7 +76,9 @@ const ReactQueryDevtools = lazy(() =>
 export const Providers = ({ children }: { children: ReactNode }) => {
 	return (
 		<QueryClientProvider client={queryClient}>
-			<ThemeProvider>{children}</ThemeProvider>
+			<ThemeProvider>
+				<AuthProvider>{children}</AuthProvider>
+			</ThemeProvider>
 			{import.meta.env.DEV && (
 				<Suspense fallback={null}>
 					<ReactQueryDevtools />
