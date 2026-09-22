@@ -5,7 +5,7 @@ import type { AuthResponse, RegisterSchemaType } from "../types";
 
 type RegisterFromValue = Omit<RegisterSchemaType, "confirmPassword">;
 
-export const registerAction = async ({
+export const register = async ({
 	email,
 	password,
 	fullName,

@@ -3,7 +3,7 @@ import { getApiErrorMessage } from "@/lib/api/error";
 import { http } from "@/lib/api/http";
 import type { AuthResponse, LoginSchemaType } from "../types";
 
-export const loginAction = async ({
+export const login = async ({
 	email,
 	password,
 }: LoginSchemaType): Promise<AuthResponse> => {

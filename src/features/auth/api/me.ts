@@ -5,7 +5,7 @@ import { http } from "@/lib/api/http";
 import type { User } from "@/types/user";
 import type { AuthResponse } from "../types";
 
-export const meAction = async (): Promise<AuthResponse> => {
+export const getMe = async (): Promise<AuthResponse> => {
 	const accessToken = getAccessToken();
 	const refreshToken = getRefreshToken();
 

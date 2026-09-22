@@ -2,10 +2,10 @@ import { create } from "zustand";
 import { clearSession, setSession } from "@/lib/api/client";
 import type { AuthStatus } from "@/types/auth";
 import type { User } from "@/types/user";
-import { loginAction } from "./api/login";
-import { logoutAction } from "./api/logout";
-import { meAction } from "./api/me";
-import { registerAction } from "./api/register";
+import { login as loginRequest } from "./api/login";
+import { logout as logoutRequest } from "./api/logout";
+import { getMe as getMeRequest } from "./api/me";
+import { register as registerRequest } from "./api/register";
 
 interface AuthState {
 	// properties
@@ -37,7 +37,7 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 	},
 	login: async (email: string, password: string) => {
 		try {
-			const { user, accessToken, refreshToken } = await loginAction({
+			const { user, accessToken, refreshToken } = await loginRequest({
 				email,
 				password,
 			});
@@ -57,7 +57,7 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 	},
 	register: async (email: string, password: string, fullName: string) => {
 		try {
-			const { user, accessToken, refreshToken } = await registerAction({
+			const { user, accessToken, refreshToken } = await registerRequest({
 				email,
 				password,
 				fullName,
@@ -78,7 +78,7 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 	},
 	logout: async () => {
 		try {
-			await logoutAction();
+			await logoutRequest();
 			clearSession();
 			set({
 				user: null,
@@ -93,7 +93,7 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 	},
 	checkAuthMe: async () => {
 		try {
-			const { user, accessToken, refreshToken } = await meAction();
+			const { user, accessToken, refreshToken } = await getMeRequest();
 			set({ user, accessToken, refreshToken, authStatus: "authenticated" });
 			return true;
 		} catch {
