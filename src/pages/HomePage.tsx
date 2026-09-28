@@ -13,8 +13,6 @@ import { useNavigate } from "react-router";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { useAuthStore } from "@/features/auth/store";
 
-// import { useAuth } from "@/lib/auth";
-
 const features = [
 	{
 		icon: LayoutDashboard,
@@ -104,11 +102,11 @@ const pricingTiers = [
 
 export const HomePage = () => {
 	const navigate = useNavigate();
-	const { user } = useAuthStore();
+	const { user, isAdmin } = useAuthStore();
 
 	const goTo = (path?: "login" | "register") => {
 		if (user) {
-			navigate("/dashboard");
+			navigate(isAdmin() ? "/admin/dashboard" : "/user/dashboard");
 			return;
 		}
 
