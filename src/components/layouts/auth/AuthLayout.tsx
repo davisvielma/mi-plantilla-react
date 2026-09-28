@@ -1,6 +1,6 @@
 import { Outlet } from "react-router";
-import { Logo } from "../common/Logo";
-import { ModeToggle } from "../common/ModeToggle";
+import { Logo } from "@/components/common/Logo";
+import { ModeToggle } from "@/components/common/ModeToggle";
 
 const AuthLayout = () => {
 	return (

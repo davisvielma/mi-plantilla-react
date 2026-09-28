@@ -59,20 +59,38 @@ mi-plantilla-react/
 │   ├── assets/                        # media, logos
 │   ├── components/                    # 🧩 Componentes UI globales (PascalCase)
 │   │   ├── ui/                        #   shadcn/ui (button, input, dropdown-menu…) (kebab-case nativo)
-│   │   ├── layouts/                   #   layouts compartidos de la aplicación (PascalCase)
-│   │   │   └── AppLayout.tsx          #   layout base (Header + Outlet + Footer) (PascalCase)
+│   │   ├── layouts/                   #   layouts de la aplicación: una carpeta por layout (kebab-case)
+│   │   │   ├── app/                   #     layout público (Header + Outlet + Footer)
+│   │   │   │   └── AppLayout.tsx      #       layout base (PascalCase)
+│   │   │   ├── auth/                  #     layout de autenticación (split 2 columnas)
+│   │   │   │   └── AuthLayout.tsx     #       (PascalCase)
+│   │   │   └── dashboard/             #     layout de panel: solo composición, sin markup atómico
+│   │   │       ├── DashboardLayout.tsx        #   estado del sidebar + composición + <Outlet/> (PascalCase)
+│   │   │       ├── DashboardSidebar.tsx       #   aside desktop + overlay móvil (PascalCase)
+│   │   │       ├── DashboardSidebarContent.tsx#   logo + nav + tarjeta de usuario, a NIVEL DE MÓDULO (PascalCase)
+│   │   │       ├── DashboardHeader.tsx        #   hamburger + notificaciones + tema + UserMenu (PascalCase)
+│   │   │       └── dashboard-nav.ts           #   config de nav + getNavSections/getUserMenuItems (kebab-case)
 │   │   └── common/                    #   componentes UI genéricos y reutilizables (no providers, no layouts) (PascalCase)
 │   │       ├── Footer.tsx             #   footer del layout: secciones + marcas sociales (PascalCase)
+│   │       ├── FullScreenLoading.tsx  #   spinner a pantalla completa para guards de ruta (PascalCase)
 │   │       ├── Header.tsx             #   header sticky: nav, tema, login/register y menú móvil (PascalCase)
-│   │       ├── Logo.tsx               #   logo React Starter con variante navbar/footer (PascalCase)
-│   │       └── ModeToggle.tsx         #   selector de tema (PascalCase)
+│   │       ├── Logo.tsx               #   logo React Starter con variante navbar/footer/auth/dashboard (PascalCase)
+│   │       ├── ModeToggle.tsx         #   selector de tema (PascalCase)
+│   │       ├── UserAvatar.tsx         #   avatar presentacional con iniciales (sin imports de features) (PascalCase)
+│   │       └── UserMenu.tsx           #   menú de usuario presentacional: user + items + onLogout por props (PascalCase)
 │   ├── features/                      # 📦 Módulos por funcionalidad
-│   │   └── example/                   #   feature de demostración (patrón a copiar)
+│   │   ├── example/                   #   feature de demostración (patrón a copiar)
+│   │   │   ├── api/                   #     endpoints axios (kebab-case)
+│   │   │   ├── components/            #     componentes de la feature (PascalCase)
+│   │   │   ├── hooks/                 #     hooks específicos de la feature (camelCase)
+│   │   │   ├── schemas/               #     validación zod (kebab-case)
+│   │   │   ├── store.ts               #     estado zustand de la feature (camelCase)
+│   │   │   └── types.ts               #     tipos de la feature (kebab-case)
+│   │   └── auth/                      #   feature de auth (ya implementada)
 │   │       ├── api/                   #     endpoints axios (kebab-case)
-│   │       ├── components/            #     componentes de la feature (PascalCase)
-│   │       ├── hooks/                 #     hooks específicos de la feature (camelCase)
+│   │       ├── components/            #     guards de ruta (PascalCase)
 │   │       ├── schemas/               #     validación zod (kebab-case)
-│   │       ├── store.ts               #     estado zustand de la feature (camelCase)
+│   │       ├── store.ts               #     estado zustand: user, tokens, authStatus, hasRole (camelCase)
 │   │       └── types.ts               #     tipos de la feature (kebab-case)
 │   ├── hooks/                         # 🪝 Hooks genéricos reutilizables globales
 │   │   └── useTheme.ts                #   hook del tema (camelCase)
@@ -82,18 +100,19 @@ mi-plantilla-react/
 │   │   │   ├── http.ts                #   helpers tipados para TanStack Query (kebab-case)
 │   │   │   └── types.ts               #   ApiResponse<T> (wrapper del backend) (kebab-case)
 │   │   ├── env.ts                     #   validación de variables de entorno con Zod (kebab-case)
+│   │   ├── user-formatter.ts           #   helpers puros de presentación de usuario (kebab-case)
 │   │   └── utils.ts                   #   cn() = clsx + tailwind-merge (kebab-case)
 │   ├── pages/                         # 🖥️ Vistas por ruta
 │   │   ├── HomePage.tsx               #   página demo: secciones Hero/Features/Pricing/CTA (PascalCase)
 │   │   ├── NotFoundPage.tsx           #   404 standalone con selector de tema propio (PascalCase)
-│   │   ├── auth/                      #   vistas de autenticación (login, register) — pendientes
+│   │   ├── auth/                      #   vistas de autenticación (login, register)
 │   │   ├── user/                      #   vistas de usuario — pendientes
-│   │   └── admin/                     #   vistas de administración — pendientes
+│   │   └── admin/                     #   vistas de administración
 │   ├── providers/                     # 🌐 Proveedores de contexto globales (PascalCase)
 │   │   └── ThemeProvider.tsx          #   proveedor de tema (PascalCase)
 │   ├── schemas/                       # esquemas zod compartidos globales (kebab-case)
 │   ├── stores/                        # stores zustand globales (camelCase)
-│   ├── types/                         # tipos TS compartidos (kebab-case)
+│   ├── types/                         # tipos TS compartidos: user, auth, roles (kebab-case)
 │   ├── index.css                      # Tailwind v4 + tokens oklch + dark variant
 │   └── main.tsx                       # entry point
 ├── components.json                    # configuración shadcn/ui
@@ -109,7 +128,22 @@ mi-plantilla-react/
 Reglas del patrón (verificación):
 - Las features NO importan entre sí (solo capas comunes). Si dos features comparten algo,
   sube a `components/`, `lib/`, `hooks/`, `stores/`, `schemas/` o `types/`.
+- `components/` (shared) NUNCA importa de `features/`: si un componente shared necesita lógica
+  de negocio, es señal de que pertenece a la feature, o de que debería recibirla por props
+  (ej: `UserMenu` es presentacional y recibe `user`/`items`/`onLogout`; el layout, que es la
+  capa app, es quien llama a `logout()` y navega).
 - `pages/` solo orquesta features; `features/` contiene la lógica de negocio.
+- Cada layout va en su propia carpeta (`layouts/app/`, `layouts/auth/`, `layouts/dashboard/`) y
+  su archivo `XLayout.tsx` es SOLO composición: el markup atómico va en archivos siblings.
+  Los componentes que se usan en varios layouts (Header, Logo, ModeToggle, UserAvatar) van en
+  `common/`, no duplicados dentro de cada layout.
+- Componentes de layout a NIVEL DE MÓDULO, nunca definidos dentro del componente padre: definirlos
+  inline los recrea en cada render y remonta el subárbol (regla `react-hooks/static-components`).
+- Componentes de shadcn sobre Base UI: NUNCA anides un `<button>`/`<div>` dentro de
+  `DropdownMenuTrigger` (ya renderiza un `<button>`) ni un `<a>` dentro de `DropdownMenuItem`
+  (ya es `role="menuitem"`). Usá la prop `render`: `render={<Button ... />}`,
+  `render={<Link to="..." />}`. `DropdownMenuLabel` requiere un `DropdownMenuGroup` ancestor o
+  lanza "MenuGroupContext is missing".
 - Páginas que NO orquestan features (demo, 404, mero enrutado) van como archivos directos
   `${Nombre}Page.tsx` en `pages/` (ej: `HomePage.tsx`); las que orquestan features van en
   subcarpetas (`pages/auth/login.tsx`, etc.).
@@ -125,9 +159,30 @@ Reglas del patrón (verificación):
 
 ## Estado actual y gotchas
 - Lista: HTTP (cliente axios + refresh + helpers), env (validación zod), shadcn base
-  (button + dropdown-menu), husky/lint-staged, providers raíz (TanStack Query + tema + Sonner),
-  theme, router v8 con AppLayout (Header + Footer) + HomePage demo + NotFoundPage, react-icons (fa6).
-- Pendiente: páginas de auth (`/login`, `/register` — hoy caen en NotFoundPage), feature ejemplo
-  (falta el endpoint demo del backend para conectar la query), README como doc propio.
+  (button, avatar, badge, card, dropdown-menu, input, label), husky/lint-staged, providers raíz
+  (TanStack Query + tema + Sonner), theme, feature auth completa (login/register/logout/me +
+  guards `AuthenticatedRoute`/`AdminRoute`/`NotAuthenticatedRoute`), router v8 con los 3 layouts
+  (`app/`, `auth/`, `dashboard/`), HomePage demo, Login/RegisterPage, AdminDashboardPage,
+  NotFoundPage, react-icons (fa6).
+- `layouts/dashboard/`: la nav se configura SOLO en `dashboard-nav.ts` con un campo opcional
+  `roles?: UserRole[]` por item (sin `roles` = visible para todos). Los selectores
+  `getNavSections(user)` / `getUserMenuItems(user`) filtran por rol; agregar un rol nuevo NO
+  requiere tocar flags: alcanza con escribir el nombre del rol en los items correspondientes.
+  No usar booleanos tipo `adminOnly` (no escala a N roles) ni filtrar por `label` (frágil).
+- Roles del backend (por ahora): `user`, `admin`, `super-user` — const `ROLES` + tipo `UserRole`
+  en `src/types/roles.ts` (un solo lugar para agregar/renombrar roles). `Role.name` es `UserRole`.
+- El store de auth expone el getter genérico `hasRole: (...roles: UserRole[]) => boolean`
+  (devuelve true si el rol del usuario está entre los pasados). Para proteger una ruta/manu
+  se llama `hasRole("admin")` etc.; agregar un rol no implica tocar el store. Si el backend
+  evoluciona a múltiples roles por usuario (`roles: string[]`), solo cambia la implementación
+  interna de `hasRole`.
+- Pendiente: feature ejemplo (falta el endpoint demo del backend para conectar la query),
+  README como doc propio, `errorElement` en el router (hoy React Router muestra su pantalla de
+  error cruda).
+- Bugs conocidos sin arreglar: los `href` de la nav (`/dashboard*`) no están registrados en
+  `Router.tsx` (caen en NotFound) ni `/user/dashboard` en `Header.tsx`; `animate-slide-in-right`
+  y `animate-fade-in` no están definidos en `index.css`; `User` no tiene campo de avatar, por eso
+  `UserAvatar` recibe `imageUrl` y hoy siempre muestra iniciales; `Header.tsx` tiene el typo
+  `lodaing`.
 - `README.md` es el README por defecto de Vite y cita configs de ESLint inexistentes; ignorarlo
   como fuente de verdad (se reescribirá como doc de la plantilla).
