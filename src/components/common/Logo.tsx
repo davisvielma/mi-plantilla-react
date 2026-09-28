@@ -1,35 +1,44 @@
 import { Sparkles } from "lucide-react";
+import { Link } from "react-router";
 
 interface Props {
 	application: "footer" | "navbar" | "auth";
 }
 
+const nameLogo = "React Starter";
+
 export const Logo = ({ application }: Props) => {
-	if (application === "auth") {
+	if (application === "footer") {
 		return (
-			<div className="relative z-10 flex items-center gap-2 text-primary-foreground">
-				<div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/20 backdrop-blur">
-					<Sparkles className="h-5 w-5" />
+			<div className="flex items-center gap-2">
+				<div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
+					<Sparkles className="h-4 w-4 text-primary-foreground" />
 				</div>
-				<span className="text-xl font-bold">React Starter</span>
+				<span className="font-semibold">{nameLogo}</span>
 			</div>
 		);
 	}
 
+	if (application === "auth") {
+		return (
+			<Link
+				to="/"
+				className="relative z-10 flex items-center gap-2 text-primary-foreground"
+			>
+				<div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/20 backdrop-blur">
+					<Sparkles className="h-5 w-5" />
+				</div>
+				<span className="text-xl font-bold">{nameLogo}</span>
+			</Link>
+		);
+	}
+
 	return (
-		<div className="flex items-center gap-2">
-			<div
-				className={`flex ${application === "navbar" ? "h-8 w-8" : "h-7 w-7"} items-center justify-center rounded-lg bg-primary`}
-			>
-				<Sparkles
-					className={`${application === "navbar" ? "h-5 w-5" : "h-4 w-4"} text-primary-foreground`}
-				/>
+		<Link to="/" className="flex items-center gap-2">
+			<div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
+				<Sparkles className="h-5 w-5 text-primary-foreground" />
 			</div>
-			<span
-				className={`${application === "navbar" ? "text-lg font-bold" : "font-semibold"}`}
-			>
-				React Starter
-			</span>
-		</div>
+			<span className="text-lg font-bold">{nameLogo}</span>
+		</Link>
 	);
 };
