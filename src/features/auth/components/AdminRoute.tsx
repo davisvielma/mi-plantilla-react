@@ -4,14 +4,14 @@ import { FullScreenLoading } from "@/components/common/FullScreenLoading";
 import { useAuthStore } from "../store";
 
 export const AdminRoute = ({ children }: PropsWithChildren) => {
-	const { isAdmin, authStatus } = useAuthStore();
+	const { hasRole, authStatus } = useAuthStore();
 
 	if (authStatus === "checking") return <FullScreenLoading />;
 
 	if (authStatus === "not-authenticated")
 		return <Navigate to="/auth/login" replace />;
 
-	if (!isAdmin()) return <Navigate to="/" replace />;
+	if (!hasRole("admin")) return <Navigate to="/" replace />;
 
 	return children;
 };

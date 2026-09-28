@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { clearSession, setSession } from "@/lib/api/client";
 import type { AuthStatus } from "@/types/auth";
+import type { UserRole } from "@/types/roles";
 import type { User } from "@/types/user";
 import { login as loginRequest } from "./api/login";
 import { logout as logoutRequest } from "./api/logout";
@@ -14,7 +15,7 @@ interface AuthState {
 	refreshToken: string | null;
 	authStatus: AuthStatus;
 	// getters
-	isAdmin: () => boolean;
+	hasRole: (...roles: UserRole[]) => boolean;
 	// actions
 	login: (email: string, password: string) => Promise<boolean>;
 	register: (
@@ -31,9 +32,9 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 	accessToken: null,
 	refreshToken: null,
 	authStatus: "checking",
-	isAdmin: () => {
-		const role = get().user?.role.name;
-		return role === "admin";
+	hasRole: (...roles) => {
+		const user = get().user;
+		return user !== null && roles.includes(user.role.name);
 	},
 	login: async (email: string, password: string) => {
 		try {

@@ -1,4 +1,4 @@
-import { ArrowRight, Menu } from "lucide-react";
+import { ArrowRight, LogOut, Menu } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
@@ -20,7 +20,7 @@ interface Props {
 export const Header = ({ sections }: Props) => {
 	const [lodaing, setLodaing] = useState(false);
 	const navigate = useNavigate();
-	const { user, logout } = useAuthStore();
+	const { user, logout, hasRole } = useAuthStore();
 
 	const handleLogout = async () => {
 		setLodaing(true);
@@ -33,7 +33,7 @@ export const Header = ({ sections }: Props) => {
 			<div className="container mx-auto flex h-16 items-center justify-between px-4">
 				<Logo application="navbar" />
 
-				<nav className="hidden items-center gap-8 md:flex">
+				<nav className="hidden items-center gap-8 lg:flex">
 					{sections.map((section) => (
 						<a
 							key={`nav-${section.ref}`}
@@ -47,13 +47,17 @@ export const Header = ({ sections }: Props) => {
 
 				<div className="flex items-center gap-2">
 					<ModeToggle />
-					<div className="hidden items-center gap-2 md:flex">
+					<div className="hidden items-center gap-2 lg:flex">
 						{user ? (
 							<>
 								<Button
 									size="sm"
 									disabled={lodaing}
-									onClick={() => navigate("/dashboard")}
+									onClick={() =>
+										navigate(
+											hasRole("admin") ? "/admin/dashboard" : "/user/dashboard",
+										)
+									}
 								>
 									Panel de control
 								</Button>
@@ -63,6 +67,7 @@ export const Header = ({ sections }: Props) => {
 									disabled={lodaing}
 									onClick={handleLogout}
 								>
+									<LogOut className="mr-1 h-4 w-4" />
 									Cerrar sesión
 								</Button>
 							</>
@@ -82,7 +87,7 @@ export const Header = ({ sections }: Props) => {
 							</>
 						)}
 					</div>
-					<div className="md:hidden">
+					<div className="lg:hidden">
 						<DropdownMenu>
 							<DropdownMenuTrigger
 								render={
@@ -105,7 +110,13 @@ export const Header = ({ sections }: Props) => {
 									<>
 										<DropdownMenuItem
 											disabled={lodaing}
-											onClick={() => navigate("/dashboard")}
+											onClick={() =>
+												navigate(
+													hasRole("admin")
+														? "/admin/dashboard"
+														: "/user/dashboard",
+												)
+											}
 										>
 											<span>Panel de control</span>
 										</DropdownMenuItem>
@@ -114,6 +125,7 @@ export const Header = ({ sections }: Props) => {
 											disabled={lodaing}
 											onClick={handleLogout}
 										>
+											<LogOut className="mr-1 h-4 w-4" />
 											<span>Cerrar sesión</span>
 										</DropdownMenuItem>
 									</>

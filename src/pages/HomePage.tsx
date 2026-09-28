@@ -102,11 +102,11 @@ const pricingTiers = [
 
 export const HomePage = () => {
 	const navigate = useNavigate();
-	const { user, isAdmin } = useAuthStore();
+	const { user, hasRole } = useAuthStore();
 
 	const goTo = (path?: "login" | "register") => {
 		if (user) {
-			navigate(isAdmin() ? "/admin/dashboard" : "/user/dashboard");
+			navigate(hasRole("admin") ? "/admin/dashboard" : "/user/dashboard");
 			return;
 		}
 
