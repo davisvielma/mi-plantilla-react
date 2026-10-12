@@ -10,6 +10,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuthStore } from "@/features/auth/store";
+import { roleLandingPath, routes } from "@/lib/routes";
 import { Logo } from "./Logo";
 import { ModeToggle } from "./ModeToggle";
 
@@ -20,7 +21,7 @@ interface Props {
 export const Header = ({ sections }: Props) => {
 	const [lodaing, setLodaing] = useState(false);
 	const navigate = useNavigate();
-	const { user, logout, hasRole } = useAuthStore();
+	const { user, logout } = useAuthStore();
 
 	const handleLogout = async () => {
 		setLodaing(true);
@@ -53,11 +54,7 @@ export const Header = ({ sections }: Props) => {
 								<Button
 									size="sm"
 									disabled={lodaing}
-									onClick={() =>
-										navigate(
-											hasRole("admin") ? "/admin/dashboard" : "/user/dashboard",
-										)
-									}
+									onClick={() => navigate(roleLandingPath(user.role.name))}
 								>
 									Panel de control
 								</Button>
@@ -76,11 +73,14 @@ export const Header = ({ sections }: Props) => {
 								<Button
 									variant="ghost"
 									size="sm"
-									onClick={() => navigate("/auth/login")}
+									onClick={() => navigate(routes.auth.login)}
 								>
 									Iniciar sesión
 								</Button>
-								<Button size="sm" onClick={() => navigate("/auth/register")}>
+								<Button
+									size="sm"
+									onClick={() => navigate(routes.auth.register)}
+								>
 									Regístrate
 									<ArrowRight className="ml-1 h-4 w-4" />
 								</Button>
@@ -110,13 +110,7 @@ export const Header = ({ sections }: Props) => {
 									<>
 										<DropdownMenuItem
 											disabled={lodaing}
-											onClick={() =>
-												navigate(
-													hasRole("admin")
-														? "/admin/dashboard"
-														: "/user/dashboard",
-												)
-											}
+											onClick={() => navigate(roleLandingPath(user.role.name))}
 										>
 											<span>Panel de control</span>
 										</DropdownMenuItem>
@@ -131,11 +125,13 @@ export const Header = ({ sections }: Props) => {
 									</>
 								) : (
 									<>
-										<DropdownMenuItem onClick={() => navigate("/auth/login")}>
+										<DropdownMenuItem
+											onClick={() => navigate(routes.auth.login)}
+										>
 											<span>Iniciar sesión</span>
 										</DropdownMenuItem>
 										<DropdownMenuItem
-											onClick={() => navigate("/auth/register")}
+											onClick={() => navigate(routes.auth.register)}
 										>
 											<span>Regístrate</span>
 										</DropdownMenuItem>

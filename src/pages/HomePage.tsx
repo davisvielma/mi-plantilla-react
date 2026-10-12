@@ -12,6 +12,7 @@ import {
 import { useNavigate } from "react-router";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { useAuthStore } from "@/features/auth/store";
+import { roleLandingPath, routes } from "@/lib/routes";
 
 const features = [
 	{
@@ -102,16 +103,16 @@ const pricingTiers = [
 
 export const HomePage = () => {
 	const navigate = useNavigate();
-	const { user, hasRole } = useAuthStore();
+	const { user } = useAuthStore();
 
 	const goTo = (path?: "login" | "register") => {
 		if (user) {
-			navigate(hasRole("admin") ? "/admin/dashboard" : "/user/dashboard");
+			navigate(roleLandingPath(user.role.name));
 			return;
 		}
 
 		if (path) {
-			navigate(path === "login" ? "/auth/login" : "/auth/register");
+			navigate(path === "login" ? routes.auth.login : routes.auth.register);
 			return;
 		}
 	};
@@ -315,7 +316,7 @@ export const HomePage = () => {
 								<Button
 									size="lg"
 									variant="outline"
-									onClick={() => navigate("/auth/login")}
+									onClick={() => navigate(routes.auth.login)}
 								>
 									Iniciar sesión
 								</Button>

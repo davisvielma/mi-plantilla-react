@@ -1,10 +1,9 @@
 import {
 	LayoutDashboard,
 	type LucideIcon,
-	Settings,
-	Shield,
-	Users,
+	// Shield
 } from "lucide-react";
+import { routes } from "@/lib/routes";
 import type { UserRole } from "@/types/roles";
 import type { User } from "@/types/user";
 
@@ -24,27 +23,31 @@ export const navSections: NavSection[] = [
 	{
 		title: "Main",
 		items: [
-			{ label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-			{ label: "Configuración", href: "/dashboard/settings", icon: Settings },
-		],
-	},
-	{
-		title: "Administration",
-		items: [
 			{
-				label: "Admin Overview",
-				href: "/admin/dashboard",
-				icon: Shield,
-				roles: ["admin"],
+				label: "Dashboard",
+				href: routes.user.dashboard,
+				icon: LayoutDashboard,
+				roles: ["user", "super-user"],
 			},
 			{
-				label: "User Management",
-				href: "/admin/dashboard/users",
-				icon: Users,
+				label: "Dashboard",
+				href: routes.admin.dashboard,
+				icon: LayoutDashboard,
 				roles: ["admin"],
 			},
 		],
 	},
+	// {
+	// 	title: "Administration",
+	// 	items: [
+	// 		{
+	// 			label: "Admin Overview",
+	// 			href: routes.admin.dashboard,
+	// 			icon: Shield,
+	// 			roles: ["admin"],
+	// 		},
+	// 	],
+	// },
 ];
 
 const canAccess = (item: NavItem, user: User | null) =>

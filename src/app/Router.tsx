@@ -4,6 +4,7 @@ import { AppLayout } from "@/components/layouts/app/AppLayout";
 import { AdminRoute } from "@/features/auth/components/AdminRoute";
 import { AuthenticatedRoute } from "@/features/auth/components/AuthenticatedRoute";
 import { NotAuthenticatedRoute } from "@/features/auth/components/NotAuthenticatedRoute";
+import { routes } from "@/lib/routes";
 import { AdminDashboardPage } from "@/pages/admin/AdminDashboardPage";
 import { LoginPage } from "@/pages/auth/LoginPage";
 import { RegisterPage } from "@/pages/auth/RegisterPage";
@@ -18,45 +19,45 @@ const DashboardLayout = lazy(
 
 export const Router = createBrowserRouter([
 	{
-		path: "/",
+		path: routes.home,
 		element: <AppLayout />,
 		children: [{ index: true, element: <HomePage /> }],
 	},
 	{
-		path: "auth",
+		path: routes.auth.root,
 		element: (
 			<NotAuthenticatedRoute>
 				<AuthLayout />
 			</NotAuthenticatedRoute>
 		),
 		children: [
-			{ index: true, element: <Navigate to="/auth/login" /> },
-			{ path: "login", element: <LoginPage /> },
-			{ path: "register", element: <RegisterPage /> },
+			{ index: true, element: <Navigate to={routes.auth.login} /> },
+			{ path: routes.auth.login, element: <LoginPage /> },
+			{ path: routes.auth.register, element: <RegisterPage /> },
 		],
 	},
 	{
-		path: "admin",
+		path: routes.admin.root,
 		element: (
 			<AdminRoute>
 				<DashboardLayout />
 			</AdminRoute>
 		),
 		children: [
-			{ index: true, element: <Navigate to="/admin/dashboard" /> },
-			{ path: "dashboard", element: <AdminDashboardPage /> },
+			{ index: true, element: <Navigate to={routes.admin.dashboard} /> },
+			{ path: routes.admin.dashboard, element: <AdminDashboardPage /> },
 		],
 	},
 	{
-		path: "user",
+		path: routes.user.root,
 		element: (
 			<AuthenticatedRoute>
 				<DashboardLayout />
 			</AuthenticatedRoute>
 		),
 		children: [
-			{ index: true, element: <Navigate to="/user/dashboard" /> },
-			{ path: "dashboard", element: <UserDashboardPage /> },
+			{ index: true, element: <Navigate to={routes.user.dashboard} /> },
+			{ path: routes.user.dashboard, element: <UserDashboardPage /> },
 		],
 	},
 	{

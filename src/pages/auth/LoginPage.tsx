@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label";
 import { loginSchema } from "@/features/auth/schemas/login.schema";
 import { useAuthStore } from "@/features/auth/store";
 import type { LoginSchemaType } from "@/features/auth/types";
+import { routes } from "@/lib/routes";
 
 export const LoginPage = () => {
 	const navigate = useNavigate();
@@ -40,7 +41,7 @@ export const LoginPage = () => {
 		const isValid = await login(data.email, data.password);
 
 		if (isValid) {
-			navigate("/");
+			navigate(routes.home);
 			return;
 		}
 	};
@@ -126,7 +127,7 @@ export const LoginPage = () => {
 				<p className="text-sm text-muted-foreground">
 					¿No tienes una cuenta?{" "}
 					<Link
-						to="/auth/register"
+						to={routes.auth.register}
 						className="font-medium text-primary hover:underline"
 					>
 						Regístrate

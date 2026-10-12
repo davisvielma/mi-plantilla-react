@@ -18,6 +18,7 @@ import { Label } from "@/components/ui/label";
 import { registerSchema } from "@/features/auth/schemas/register.schema";
 import { useAuthStore } from "@/features/auth/store";
 import type { RegisterSchemaType } from "@/features/auth/types";
+import { routes } from "@/lib/routes";
 
 export const RegisterPage = () => {
 	const navigate = useNavigate();
@@ -49,7 +50,7 @@ export const RegisterPage = () => {
 
 		if (isValid) {
 			toast.success("Su cuenta se ha creado correctamente.");
-			navigate("/");
+			navigate(routes.home);
 			return;
 		}
 	};
@@ -190,7 +191,7 @@ export const RegisterPage = () => {
 				<p className="text-sm text-muted-foreground">
 					¿Ya tienes una cuenta?{" "}
 					<Link
-						to="/auth/login"
+						to={routes.auth.login}
 						className="font-medium text-primary hover:underline"
 					>
 						Iniciar sesión

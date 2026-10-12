@@ -4,6 +4,7 @@ import { ModeToggle } from "@/components/common/ModeToggle";
 import { UserMenu } from "@/components/common/UserMenu";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/features/auth/store";
+import { routes } from "@/lib/routes";
 import { getUserMenuItems } from "./dashboard-nav";
 
 interface Props {
@@ -16,7 +17,7 @@ export const DashboardHeader = ({ onOpenSidebar }: Props) => {
 
 	const handleLogout = async () => {
 		await logout();
-		navigate("/auth/login", { replace: true });
+		navigate(routes.auth.login, { replace: true });
 	};
 
 	return (

@@ -1,6 +1,7 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from "axios";
 import type { ApiResponse } from "@/lib/api/types";
 import { env } from "@/lib/env";
+import { routes } from "@/lib/routes";
 
 export const ACCESS_TOKEN_KEY = "access-token";
 export const REFRESH_TOKEN_KEY = "refresh-token";
@@ -77,11 +78,11 @@ apiClient.interceptors.response.use(
 					return apiClient(config);
 				} catch {
 					clearSession();
-					window.location.assign("/auth/login");
+					window.location.assign(routes.auth.login);
 				}
 			} else {
 				clearSession();
-				window.location.assign("/auth/login");
+				window.location.assign(routes.auth.login);
 			}
 		}
 

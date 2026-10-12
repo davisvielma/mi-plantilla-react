@@ -1,6 +1,7 @@
 import type { PropsWithChildren } from "react";
 import { Navigate } from "react-router";
 import { FullScreenLoading } from "@/components/common/FullScreenLoading";
+import { routes } from "@/lib/routes";
 import { useAuthStore } from "../store";
 
 export const AdminRoute = ({ children }: PropsWithChildren) => {
@@ -9,9 +10,9 @@ export const AdminRoute = ({ children }: PropsWithChildren) => {
 	if (authStatus === "checking") return <FullScreenLoading />;
 
 	if (authStatus === "not-authenticated")
-		return <Navigate to="/auth/login" replace />;
+		return <Navigate to={routes.auth.login} replace />;
 
-	if (!hasRole("admin")) return <Navigate to="/" replace />;
+	if (!hasRole("admin")) return <Navigate to={routes.home} replace />;
 
 	return children;
 };

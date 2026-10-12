@@ -2,12 +2,13 @@ import { Compass, Home } from "lucide-react";
 import { useNavigate } from "react-router";
 import { ModeToggle } from "@/components/common/ModeToggle";
 import { Button } from "@/components/ui/button";
+import { routes } from "@/lib/routes";
 
 export const NotFoundPage = () => {
 	const navigate = useNavigate();
 
 	const handleButton = () => {
-		navigate("/");
+		navigate(routes.home);
 	};
 
 	return (
