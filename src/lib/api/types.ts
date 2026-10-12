@@ -6,6 +6,14 @@ export type ApiResponse<T> = {
 	method: string;
 };
 
+export type Paginated<T> = {
+	items: T[];
+	page: number;
+	perPage: number;
+	totalItems: number;
+	totalPages: number;
+};
+
 export interface ApiErrorBody {
 	statusCode: number;
 	errorCode: string;

@@ -58,7 +58,7 @@ mi-plantilla-react/
 │   │   └── Router.tsx                 #   createBrowserRouter (React Router v8) (PascalCase)
 │   ├── assets/                        # media, logos
 │   ├── components/                    # 🧩 Componentes UI globales (PascalCase)
-│   │   ├── ui/                        #   shadcn/ui (button, input, dropdown-menu…) (kebab-case nativo)
+│   │   ├── ui/                        #   shadcn/ui (button, input, skeleton, table…) (kebab-case nativo)
 │   │   ├── layouts/                   #   layouts de la aplicación: una carpeta por layout (kebab-case)
 │   │   │   ├── app/                   #     layout público (Header + Outlet + Footer)
 │   │   │   │   └── AppLayout.tsx      #       layout base (PascalCase)
@@ -71,16 +71,19 @@ mi-plantilla-react/
 │   │   │       ├── DashboardHeader.tsx        #   hamburger + notificaciones + tema + UserMenu (PascalCase)
 │   │   │       └── dashboard-nav.ts           #   config de nav + getNavSections/getUserMenuItems (kebab-case)
 │   │   └── common/                    #   componentes UI genéricos y reutilizables (no providers, no layouts) (PascalCase)
+│   │       ├── ContentLoading.tsx     #   loading interno de contenido: skeletons (list/table/cards) (PascalCase)
 │   │       ├── Footer.tsx             #   footer del layout: secciones + marcas sociales (PascalCase)
 │   │       ├── FullScreenLoading.tsx  #   spinner a pantalla completa para guards de ruta (PascalCase)
 │   │       ├── Header.tsx             #   header sticky: nav, tema, login/register y menú móvil (PascalCase)
 │   │       ├── Logo.tsx               #   logo React Starter con variante navbar/footer/auth/dashboard (PascalCase)
 │   │       ├── ModeToggle.tsx         #   selector de tema (PascalCase)
+│   │       ├── Pagination.tsx         #   paginación URL-driven: dueña de `?page`, clamp + corrección (PascalCase)
+│   │       ├── Search.tsx             #   búsqueda URL-driven: dueña de `?q`, debounce + Enter + botón limpiar (PascalCase)
 │   │       ├── UserAvatar.tsx         #   avatar presentacional con iniciales (sin imports de features) (PascalCase)
 │   │       └── UserMenu.tsx           #   menú de usuario presentacional: user + items + onLogout por props (PascalCase)
 │   ├── features/                      # 📦 Módulos por funcionalidad
-│   │   ├── example/                   #   feature de demostración (patrón a copiar)
-│   │   │   ├── api/                   #     endpoints axios (kebab-case)
+│   │   ├── example/                   #   feature de demostración (patrón a copiar, API mock)
+│   │   │   ├── api/                   #     endpoint mock con latencia simulada (kebab-case)
 │   │   │   ├── components/            #     componentes de la feature (PascalCase)
 │   │   │   ├── hooks/                 #     hooks específicos de la feature (camelCase)
 │   │   │   ├── schemas/               #     validación zod (kebab-case)
@@ -93,13 +96,15 @@ mi-plantilla-react/
 │   │       ├── store.ts               #     estado zustand: user, tokens, authStatus, hasRole (camelCase)
 │   │       └── types.ts               #     tipos de la feature (kebab-case)
 │   ├── hooks/                         # 🪝 Hooks genéricos reutilizables globales
+│   │   ├── useDebouncedValue.ts       #   debounce genérico de cualquier valor (camelCase)
 │   │   └── useTheme.ts                #   hook del tema (camelCase)
 │   ├── lib/                           # 🔧 Infraestructura técnica
 │   │   ├── api/
 │   │   │   ├── client.ts              #   instancia axios + interceptores (JWT, refresh, 401/403/500) (kebab-case)
 │   │   │   ├── http.ts                #   helpers tipados para TanStack Query (kebab-case)
-│   │   │   └── types.ts               #   ApiResponse<T> (wrapper del backend) (kebab-case)
+│   │   │   └── types.ts               #   ApiResponse<T> + Paginated<T> (kebab-case)
 │   │   ├── env.ts                     #   validación de variables de entorno con Zod (kebab-case)
+│   │   ├── pagination.ts              #   helpers puros de paginación (getPaginationItems, isFirstPage…) (kebab-case)
 │   │   ├── user-formatter.ts           #   helpers puros de presentación de usuario (kebab-case)
 │   │   └── utils.ts                   #   cn() = clsx + tailwind-merge (kebab-case)
 │   ├── pages/                         # 🖥️ Vistas por ruta
@@ -159,11 +164,32 @@ Reglas del patrón (verificación):
 
 ## Estado actual y gotchas
 - Lista: HTTP (cliente axios + refresh + helpers), env (validación zod), shadcn base
-  (button, avatar, badge, card, dropdown-menu, input, label), husky/lint-staged, providers raíz
-  (TanStack Query + tema + Sonner), theme, feature auth completa (login/register/logout/me +
+  (button, avatar, badge, card, dropdown-menu, input, label, skeleton, table), husky/lint-staged,
+  providers raíz (TanStack Query + tema + Sonner), theme, feature auth completa (login/register/logout/me +
   guards `AuthenticatedRoute`/`AdminRoute`/`NotAuthenticatedRoute`), router v8 con los 3 layouts
   (`app/`, `auth/`, `dashboard/`), HomePage demo, Login/RegisterPage, AdminDashboardPage,
-  NotFoundPage, react-icons (fa6).
+  NotFoundPage, react-icons (fa6), common de listados (`Search`, `Pagination`, `ContentLoading`),
+  hook `useDebouncedValue`, helper `lib/pagination.ts`, feature `example` (mock) integrada en
+  `AdminDashboardPage`.
+- Listados con `Search` + `Pagination` + `ContentLoading`: `Search` y `Pagination` son URL-driven y
+  NO reciben estado por props. `Search` es dueña de `?q` (debounce de 350ms y el `X` limpia al
+  instante; escribir NO resetea `page`, solo borra `?page` cuando el término cambia) y `Pagination`
+  es dueña de `?page` (normaliza la URL a su forma canónica: `page=1`/valores inválidos se eliminan
+  y fuera de rango se corrige a la última página con `replace`). Ambas escriben con
+  `setSearchParams(updater, { replace: true })` **construyendo un `URLSearchParams` nuevo** (nunca
+  mutando `prev`: mutarlo corrompe el estado interno del router y revierte escrituras). La feature
+  solo lee la URL en su hook (`useSearchParams` + `parsePageParam`) y arma el `queryKey`; al
+  recargar (`isPending` → `ContentLoading`, `isFetching` → `placeholderData` + atenuado para no
+  desmontar la tabla).
+- `Search` NO usa `<form>`/`onSubmit` (la búsqueda ya se escribe sola por debounce, así que enviar
+  no aporta nada y Enter se ignora): el input escribe la URL en cada pausa de tipeo. El efecto de
+  escritura solo actúa cuando el `debouncedTerm` alcanzó la última intención del usuario (ref
+  `pendingTerm`), si no podría revertir a un valor viejo al sincronizar desde la URL.
+- `ContentLoading` es el loading interno de contenido (skeletons, sin layout shift) y es distinto de
+  `FullScreenLoading`, que queda solo para guards de ruta (`AuthProvider`).
+- Pendiente: conectar la feature ejemplo al endpoint real del backend (hoy usa mock con 900ms de
+  latencia), README como doc propio, `errorElement` en el router (hoy React Router muestra su
+  pantalla de error cruda).
 - `layouts/dashboard/`: la nav se configura SOLO en `dashboard-nav.ts` con un campo opcional
   `roles?: UserRole[]` por item (sin `roles` = visible para todos). Los selectores
   `getNavSections(user)` / `getUserMenuItems(user`) filtran por rol; agregar un rol nuevo NO
@@ -176,9 +202,6 @@ Reglas del patrón (verificación):
   se llama `hasRole("admin")` etc.; agregar un rol no implica tocar el store. Si el backend
   evoluciona a múltiples roles por usuario (`roles: string[]`), solo cambia la implementación
   interna de `hasRole`.
-- Pendiente: feature ejemplo (falta el endpoint demo del backend para conectar la query),
-  README como doc propio, `errorElement` en el router (hoy React Router muestra su pantalla de
-  error cruda).
 - Bugs conocidos sin arreglar: los `href` de la nav (`/dashboard*`) no están registrados en
   `Router.tsx` (caen en NotFound) ni `/user/dashboard` en `Header.tsx`; `animate-slide-in-right`
   y `animate-fade-in` no están definidos en `index.css`; `User` no tiene campo de avatar, por eso
