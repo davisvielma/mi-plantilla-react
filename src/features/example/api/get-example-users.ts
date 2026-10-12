@@ -1,7 +1,6 @@
 import type { Paginated } from "@/lib/api/types";
 import type { ExampleUser } from "../types";
-
-const MOCK_LATENCY_MS = 900;
+import { MOCK_LATENCY_MS, simulateLatency } from "./mock";
 
 const FIRST_NAMES = [
 	"Ana",
@@ -61,15 +60,6 @@ const buildMockUsers = (): ExampleUser[] =>
 
 const MOCK_USERS = buildMockUsers();
 
-const wait = (ms: number, signal?: AbortSignal) =>
-	new Promise<void>((resolve) => {
-		const timeout = setTimeout(resolve, ms);
-
-		signal?.addEventListener("abort", () => clearTimeout(timeout), {
-			once: true,
-		});
-	});
-
 export interface GetExampleUsersParams {
 	page?: number;
 	perPage?: number;
@@ -83,7 +73,7 @@ export const getExampleUsers = async ({
 	search = "",
 	signal,
 }: GetExampleUsersParams): Promise<Paginated<ExampleUser>> => {
-	await wait(MOCK_LATENCY_MS, signal);
+	await simulateLatency(MOCK_LATENCY_MS, signal);
 
 	const term = search.trim().toLowerCase();
 	const filtered = term
