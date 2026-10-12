@@ -33,13 +33,13 @@ export const navSections: NavSection[] = [
 		items: [
 			{
 				label: "Admin Overview",
-				href: "/dashboard/admin",
+				href: "/admin/dashboard",
 				icon: Shield,
 				roles: ["admin"],
 			},
 			{
 				label: "User Management",
-				href: "/dashboard/admin/users",
+				href: "/admin/dashboard/users",
 				icon: Users,
 				roles: ["admin"],
 			},
